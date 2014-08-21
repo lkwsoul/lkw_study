@@ -52,4 +52,10 @@ public class HomeController {
     return "home2";
   }
 	
+	@RequestMapping(value = "/test.do", method = RequestMethod.GET )
+  public String test(Locale locale, Model model) {
+	  model.addAttribute("now", "테스트입니다.");
+    return "test";
+  }
+	
 }

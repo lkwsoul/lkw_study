@@ -109,6 +109,12 @@
 			<version>1.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.32</version>
+		</dependency>
+
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -153,7 +159,7 @@
 					<mainClass>org.test.int1.Main</mainClass>
 				</configuration>
 			</plugin>
-			
+
 			<!-- Tomcat Plug-in -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
