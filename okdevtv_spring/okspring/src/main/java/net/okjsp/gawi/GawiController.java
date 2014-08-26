@@ -29,10 +29,6 @@ public class GawiController {
     // RequestParam사용시 별도 지정없이 사용시 null전달시 에러가 발생되고 있음
     
     logger.debug("begin queryJSON method!");
-    String queryResult = "";
-    if(callback!=null){
-      queryResult += "(";
-    }
     
     Play play = new Play();
     
@@ -41,24 +37,8 @@ public class GawiController {
     
     Stat stat = play.getStat();
     
-    queryResult += "{\"success\": true,";
-    queryResult += "\"p1\":{\"name\":\"당신\", \"choice\":\"" + play.items[game.getChoice()] + "\"},";
-    queryResult += " \"p2\":{\"name\":\"컴퓨터\", \"choice\":\"" + play.items[game.getComputerChoice()]  + "\"},";
-    queryResult += "\"judgement\" : \"" + game.getJudgement()+ "\",";
-    queryResult += "\"stat\" : {\"total\":" + stat.getTotal()+ ", ";
-    queryResult += "\"win\":" + stat.getWin()+ ", ";
-    queryResult += "\"even\":" + stat.getEven()+ ", ";
-    queryResult += "\"lose\":" + stat.getLose()+ ", ";
-    queryResult += "\"rate\":\"" + stat.getRate()+ "%\"}";
-    queryResult += "}";
-    
-    if(callback!=null){
-      queryResult += ")";
-    }
-    
-    logger.debug("queryResult = " + queryResult);
-    
-    model.addAttribute("queryResult", queryResult);
+    model.addAttribute("game", game);
+    model.addAttribute("stat", stat);
     
     logger.debug("end queryJSON method!");
     return "queryJSON";

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Play {
 
-  public String[] items = { "가위", "바위", "보" };
+  public static String[] items = { "가위", "바위", "보" };
   private List<Game> list;
   DataAccessObject dao = new DataAccessObject();
   Stat stat = new Stat();
@@ -36,26 +36,30 @@ public class Play {
     System.out.print("\n----\n선택하세요:");
 
     Scanner scanner = new Scanner(System.in);
-    String next = scanner.next();
-    int choice = Integer.parseInt(next);
-
-    if (choice < 0 || choice > 2) {
-      System.out.println("0~2 숫자만 입력해주세요.\n게임을 종료합니다.");
-      return false;
+    try{
+      String next = scanner.next();
+      int choice = Integer.parseInt(next);
+  
+      if (choice < 0 || choice > 2) {
+        System.out.println("0~2 숫자만 입력해주세요.\n게임을 종료합니다.");
+        return false;
+      }
+  
+      int computerChoice = getComputerChoice();
+  
+      System.out.println("----\n" + "당신: " + items[choice] + "\n컴퓨터: "
+          + items[computerChoice]);
+  
+      String judgement = judge(choice, computerChoice);
+  
+      System.out.println("----\n" + judgement);
+  
+      save(choice, computerChoice, judgement);
+  
+      showStat();
+    }finally{
+      scanner.close();
     }
-
-    int computerChoice = getComputerChoice();
-
-    System.out.println("----\n" + "당신: " + items[choice] + "\n컴퓨터: "
-        + items[computerChoice]);
-
-    String judgement = judge(choice, computerChoice);
-
-    System.out.println("----\n" + judgement);
-
-    save(choice, computerChoice, judgement);
-
-    showStat();
 
     return true;
   }

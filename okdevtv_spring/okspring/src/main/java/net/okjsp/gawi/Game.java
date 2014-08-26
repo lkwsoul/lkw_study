@@ -11,15 +11,15 @@ public class Game implements Serializable  {
 	private int computerChoice;
 	private String judgement;
 	private Date datetime;
+	
+	public Game(){
+	}
 
 	public Game(int choice, int computerChoice, String judgement, Date datetime) {
 		this.choice = choice;
 		this.computerChoice = computerChoice;
 		this.judgement = judgement;
 		this.datetime = datetime;
-	}
-
-	public Game() {
 	}
 
 	public int getId() {
@@ -65,17 +65,28 @@ public class Game implements Serializable  {
 	public int getJudge() {
 		int judgement;
 
+		//Drew
 		if (this.choice == this.computerChoice) {
 			judgement = 0;
 		} else {
 			int diff = this.computerChoice - this.choice;
+			//Computer win
 			if ((diff == 1) || (diff == -2)) {
 				judgement = -1;
+		  //You win
 			} else {
 				judgement = 1;
 			}
 		}
 		return judgement;
 	}
+
+  public String getChoiceItem() {
+    return Play.items[this.choice];
+  }
+
+  public String getComputerChoiceItem() {
+    return Play.items[this.computerChoice];
+  }
 
 }
