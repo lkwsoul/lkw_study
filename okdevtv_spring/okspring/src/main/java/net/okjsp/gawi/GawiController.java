@@ -1,7 +1,10 @@
 package net.okjsp.gawi;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +17,10 @@ public class GawiController {
 
   private static final Logger logger = LoggerFactory
       .getLogger(GawiController.class);
+  
+  //@Autowired
+  @Resource
+  GameService gameService;
 
   @RequestMapping(value = "/gawi.do", method = RequestMethod.GET)
   public String gawi(Model model) {
@@ -30,10 +37,8 @@ public class GawiController {
     
     logger.debug("begin queryJSON method!");
     
-    Play play = new Play();
-    
-    //비지니스로직 분리
-    GawiService.play(game, play);
+    //비지니스 로직 분리
+    Play play = gameService.play(game);
     
     Stat stat = play.getStat();
     
