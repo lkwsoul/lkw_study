@@ -35,12 +35,28 @@ public class GameDaoImpl implements GameDao {
     try {
       GameMapper mapper = session.getMapper(GameMapper.class);
       mapper.insertGame(game);
-    } finally {
       session.commit();
+    }catch(Exception e){
+      e.printStackTrace();
+      session.rollback();
+    } finally {
       session.close();
     }
     return 0;
     //loadStat();
   }
-
+  
+  @Override
+  public Game getGame(String judgement) {
+    Game game;
+    SqlSession session = sqlSessionFactory.openSession();
+    try {
+      GameMapper mapper = session.getMapper(GameMapper.class);
+      game = mapper.getGame(judgement);
+    } finally {
+      session.close();
+    }
+    return game;
+  }
+  
 }

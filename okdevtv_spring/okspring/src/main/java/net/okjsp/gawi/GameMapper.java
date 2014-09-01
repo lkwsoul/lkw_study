@@ -8,5 +8,7 @@ public interface GameMapper {
 	List<StatTemp> getGameStat();
 
 	void insertGame(Game game);
+	
+	Game getGame(String judgement);
 
 }

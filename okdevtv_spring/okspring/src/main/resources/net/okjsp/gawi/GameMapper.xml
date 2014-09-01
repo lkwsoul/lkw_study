@@ -5,24 +5,35 @@
 <mapper namespace="net.okjsp.gawi.GameMapper">
 	<select id="getGameList" resultType="net.okjsp.gawi.Game">
 		SELECT
-			choice,
-			computerChoice,
-			judgement,
-			datetime
+		choice,
+		computerChoice,
+		judgement,
+		datetime
 		FROM game
 	</select>
 
 	<select id="getGameStat" resultType="net.okjsp.gawi.StatTemp">
-SELECT judgement, count(*) count
-FROM game
-GROUP BY judgement;
+		SELECT judgement, count(*) count
+		FROM game
+		GROUP BY judgement;
 	</select>
-	
-	<insert id="insertGame" parameterType="net.okjsp.gawi.Game" useGeneratedKeys="true"
-    keyProperty="id">
-	insert into game 
-		(choice, computerChoice, judgement, datetime) 
-		values 
+
+	<insert id="insertGame" parameterType="net.okjsp.gawi.Game"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into game
+		(choice, computerChoice, judgement, datetime)
+		values
 		(#{choice}, #{computerChoice}, #{judgement}, #{datetime})
 	</insert>
+
+	<select id="getGame" resultType="net.okjsp.gawi.Game" parameterType="String">
+		SELECT
+		choice,
+    computerChoice,
+    judgement,
+    datetime
+		  FROM game
+		 WHERE judgement like '%' || #{judgement} || '%' limit 1;
+	</select>
+
 </mapper>
