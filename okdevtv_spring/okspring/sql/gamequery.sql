@@ -6,6 +6,7 @@ create database javatest;
 
 /*Table structure for table `game` */
 drop table javatest.game;
+
 CREATE TABLE javatest.`game` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `choice` int(11) NOT NULL,
