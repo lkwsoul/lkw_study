@@ -3,6 +3,8 @@ package com.lkwsoul.stream.test;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import java.util.stream.Stream;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,28 +12,34 @@ import com.lkwsoul.stream.StreamMain;
 
 public class StreamMainTest {
   
-  StreamMain StreamMain;
+  StreamMain streamMain;
 
   @Before
   public void setUp() throws Exception {
-    StreamMain = new StreamMain();
+    streamMain = new StreamMain();
   }
 
   @Test
   public void getCountLengthOver() {
-    long longReturn = StreamMain.getCountLengthOver(10);
+    long longReturn = streamMain.getCountLengthOver(10);
     assertThat(longReturn, is(5L));
   }
   
   @Test
   public void getCountLengthOverL() {
-    long longReturn = StreamMain.getCountLengthOverL(10);
+    long longReturn = streamMain.getCountLengthOverL(10);
     assertThat(longReturn, is(5L));
   }
   
   @Test
   public void chkCountLengthOver() {
-    assertThat(StreamMain.getCountLengthOver(10), is(StreamMain.getCountLengthOverL(10)));
+    assertThat(streamMain.getCountLengthOver(10), is(streamMain.getCountLengthOverL(10)));
+  }
+  
+  @Test
+  public void createStream() {
+    Stream<String> stream = streamMain.createStream();
+    assertThat(stream.count(), is(20L));
   }
 
 }

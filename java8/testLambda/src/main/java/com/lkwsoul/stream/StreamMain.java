@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class StreamMain {
 
@@ -20,7 +21,7 @@ public class StreamMain {
    */
   public long getCountLengthOver(int limitLenth) {
     // 파일을 문자열로 읽어온다
-    List<String> words = readFile();
+    List<String> words = contentToList();
 
     long count = 0;
     for (String w : words) {
@@ -32,14 +33,28 @@ public class StreamMain {
   }
 
   /**
-   * 파일 읽기
+   * content를 List로 만들빈다.
    * 
    * @return
    */
-  public List<String> readFile() {
+  private List<String> contentToList() {
     String contents = "";
+    String filePath = "/com/lkwsoul/stream/readme.txt";
+    contents = readFile(filePath);
+
+    List<String> words = Arrays.asList(contents.split(System.lineSeparator()));
+    return words;
+  }
+
+  /**
+   * 파일 읽기
+   * @param filePath
+   * @return
+   */
+  private String readFile(String filePath) {
+    String contents = ""; 
     try {
-      URI uri = this.getClass().getResource("/com/lkwsoul/stream/readme.txt")
+      URI uri = this.getClass().getResource(filePath)
           .toURI();
       contents = new String(Files.readAllBytes(Paths.get(uri)),
           StandardCharsets.UTF_8);
@@ -48,24 +63,33 @@ public class StreamMain {
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
-
-    List<String> words = Arrays.asList(contents.split(System.lineSeparator()));
-    return words;
+    return contents;
   }
 
   /**
    * 특정 길이를 오버하는 텍스트 라인 수 조회하기 - 람다식으로 변경
+   * 
    * @param limitLenth
    * @return
    */
   public long getCountLengthOverL(int limitLenth) {
     // 파일을 문자열로 읽어온다
-    List<String> words = readFile();
+    List<String> words = contentToList();
 
     long count = 0;
-    //count = words.stream().filter(w -> w.length() > limitLenth).count();
+    // count = words.stream().filter(w -> w.length() > limitLenth).count();
     count = words.parallelStream().filter(w -> w.length() > limitLenth).count();
     return count;
+  }
+  
+  public Stream<String> createStream() {
+    String filePath = "/com/lkwsoul/stream/stream.txt";
+    String contents = readFile(filePath);
+    
+    //배열로 Stream 만들기
+    Stream<String> words = Stream.of(contents.split(System.lineSeparator()));
+    
+    return words;
   }
 
 }
