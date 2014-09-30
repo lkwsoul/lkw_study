@@ -41,5 +41,29 @@ public class StreamMainTest {
     Stream<String> stream = streamMain.createStream();
     assertThat(stream.count(), is(20L));
   }
+  
+  @Test
+  public void createSteamAlphabet(){
+    Stream<String> stream = streamMain.createSteamAlphabet();
+    assertThat( stream.toArray()[0] , is("A") );
+  }
+  
+  @Test
+  public void peekCheck() {
+    Object [] objReturn = streamMain.peekCheck();
+    assertThat(objReturn.length, is(20));
+  }
+  
+  @Test
+  public void maxAlphabet() {
+    String strMax = streamMain.maxAlphabet();
+    assertThat(strMax, is("Z"));
+  }
+  
+  @Test
+  public void minAlphabet() {
+    String strMax = streamMain.minAlphabet();
+    assertThat(strMax, is("A"));
+  }
 
 }

@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class StreamMain {
@@ -48,14 +49,14 @@ public class StreamMain {
 
   /**
    * 파일 읽기
+   * 
    * @param filePath
    * @return
    */
   private String readFile(String filePath) {
-    String contents = ""; 
+    String contents = "";
     try {
-      URI uri = this.getClass().getResource(filePath)
-          .toURI();
+      URI uri = this.getClass().getResource(filePath).toURI();
       contents = new String(Files.readAllBytes(Paths.get(uri)),
           StandardCharsets.UTF_8);
     } catch (IOException e) {
@@ -81,15 +82,54 @@ public class StreamMain {
     count = words.parallelStream().filter(w -> w.length() > limitLenth).count();
     return count;
   }
-  
+
   public Stream<String> createStream() {
     String filePath = "/com/lkwsoul/stream/stream.txt";
     String contents = readFile(filePath);
-    
-    //배열로 Stream 만들기
+
+    // 배열로 Stream 만들기
+    Stream<String> words = Stream.of(contents.split(System.lineSeparator()));
+
+    return words;
+  }
+
+  public Stream<String> createSteamAlphabet() {
+    String filePath = "/com/lkwsoul/stream/alphabet.txt";
+    String contents = readFile(filePath);
+
+    // 배열로 Stream 만들기
     Stream<String> words = Stream.of(contents.split(System.lineSeparator()));
     
-    return words;
+    Stream<String> upperWords = words.map(String::toUpperCase);
+    
+    return upperWords;
+  }
+  
+  public Object [] peekCheck() {
+    Object [] powers = Stream.iterate(1.0, p -> p *2)
+                      .peek(e -> System.out.println("Fetching " + e))
+                      .limit(20)
+                      .toArray();
+    
+    return powers;
+  }
+  
+  public String maxAlphabet() {
+    String strMax = "";
+    Stream<String> words = this.createSteamAlphabet();
+    Optional<String> largest = words.max(String::compareToIgnoreCase);
+    if(largest.isPresent())
+      strMax = largest.get();
+    return strMax;
+  }
+  
+  public String minAlphabet() {
+    String strMin = "";
+    Stream<String> words = this.createSteamAlphabet();
+    Optional<String> largest = words.min(String::compareToIgnoreCase);
+    if(largest.isPresent())
+      strMin = largest.get();
+    return strMin;
   }
 
 }
