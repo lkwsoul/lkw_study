@@ -65,5 +65,13 @@ public class StreamMainTest {
     String strMax = streamMain.minAlphabet();
     assertThat(strMax, is("A"));
   }
+  
+  @Test
+  public void streamToString() {
+    Stream<String> stream = streamMain.createStream();
+    String [] arr = streamMain.streamToString(stream);
+    
+    assertThat(arr[0], is("테스트1")); 
+  }
 
 }

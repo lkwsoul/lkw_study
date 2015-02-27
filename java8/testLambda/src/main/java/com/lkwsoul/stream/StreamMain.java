@@ -99,37 +99,48 @@ public class StreamMain {
 
     // 배열로 Stream 만들기
     Stream<String> words = Stream.of(contents.split(System.lineSeparator()));
-    
+
     Stream<String> upperWords = words.map(String::toUpperCase);
-    
+
     return upperWords;
   }
-  
-  public Object [] peekCheck() {
-    Object [] powers = Stream.iterate(1.0, p -> p *2)
-                      .peek(e -> System.out.println("Fetching " + e))
-                      .limit(20)
-                      .toArray();
-    
+
+  public Object[] peekCheck() {
+    Object[] powers = Stream.iterate(1.0, p -> p * 2)
+        .peek(e -> System.out.println("Fetching " + e)).limit(20).toArray();
+
     return powers;
   }
-  
+
+  String strMax = "";
+
   public String maxAlphabet() {
-    String strMax = "";
     Stream<String> words = this.createSteamAlphabet();
     Optional<String> largest = words.max(String::compareToIgnoreCase);
-    if(largest.isPresent())
-      strMax = largest.get();
+    /*
+     * ifPresent를 활용한 람다식으로 변경
+     * if(largest.isPresent()) strMax = largest.get();
+     */
+    largest.ifPresent(value -> this.strMax = value);
     return strMax;
   }
-  
+
+  String strMin = "";
+
   public String minAlphabet() {
-    String strMin = "";
     Stream<String> words = this.createSteamAlphabet();
     Optional<String> largest = words.min(String::compareToIgnoreCase);
-    if(largest.isPresent())
-      strMin = largest.get();
+    /*
+     * ifPresent를 활용한 람다식으로 변경
+     * if(largest.isPresent()) strMin = largest.get();
+     */
+    largest.ifPresent(value -> this.strMin = value);
     return strMin;
+  }
+  
+  public String[] streamToString(Stream<String> stream) {
+    return stream.toArray(String[]::new);
+    //toArray는 Obejct[]를 리턴합니다.
   }
 
 }
