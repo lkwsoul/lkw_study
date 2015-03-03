@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.view.chapter6.MyForm'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        fp.add({
+          xtype: 'radiogroup',
+          fieldLabel: '라디오그룹',
+          allowBlank: false,
+          columns: 3,
+          items: [
+            {
+              xtype: 'radio',
+              boxLabel: '윈도우95',
+              name: 'os',
+              inputValue: 'win95',
+              checked: true
+            },
+            {
+              xtype: 'radio',
+              boxLabel: '윈도우XP',
+              name: 'os',
+              inputValue: 'winxp'
+            },
+            {
+              xtype: 'radio',
+              boxLabel: '윈도우7',
+              name: 'os',
+              inputValue: 'win7'
+            },
+            {
+              xtype: 'radio',
+              boxLabel: '윈도우8',
+              name: 'os',
+              inputValue: 'win8'
+            },
+            {
+              xtype: 'radio',
+              boxLabel: '우분투',
+              name: 'os',
+              inputValue: 'ubuntu'
+            },
+            {
+              xtype: 'radio',
+              boxLabel: 'MacOS',
+              name: 'os',
+              inputValue: 'mac'
+            }
+          ]
+        });
+
+        var chkboxgroup = fp.down('checkboxgroup[name=mobilephone]');
+
+        //name속성이 mobilephone인것 중에서 inputValue가 'gs' 인것 체크상태로 변경
+        /*
+        chkboxgroup.setValue({
+          mobilephone: ['gs']
+        });
+        */
+
+        //name속성이 mobilephone인것 중에서 name이 'ip4' 인것 체크상태로 변경
+        //boolean값을 조정함
+        /*
+        chkboxgroup.setValue({
+          ip4: true
+        });
+        */
+
+        //세번째로는 위 두가지 방법을 혼용하여 사용가능함
+        chkboxgroup.setValue({
+          mobilephone: ['gs', 'g2'],
+          ip4: true
+        });
+      });
+    </script>
+  </body>
+</html>

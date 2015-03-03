@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.view.chapter6.CustomPickerField',
+        'ext5.view.chapter6.MyForm'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        fp.add({
+          xtype: 'chapter6-custompicker',
+          fieldLabel: 'First Name',
+          name: 'first',
+          allowBlank: false,
+          // 선택적 UI사용
+          pickerAlias: 'chapter6-gridpicker'        //선택적으로 사용할 widget명을 지정함
+        });
+
+        fp.add({
+          xtype: 'chapter6-custompicker',
+          fieldLabel: 'Last Name',
+          name: 'last',
+          allowBlank: false,
+          matchFieldWidth: false,                   // 피커는 텍스트 필드의 크기와 같은 너비로 설정됨, 이크기를 변경해 원래 그리드 클래스의 크기로
+                                                    // 보여줄때, matchFieldWidth를 false로 설정함
+          pickerOffset: [10, 10],
+          pickerAlias: 'chapter6-windowpicker'
+        });
+
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.model.ticket.User',
+        'ext5.model.ticket.Organization',
+        'ext5.model.ticket.Project',
+        'ext5.model.ticket.Group'
+      ]);
+
+      Ext.onReady(function(){
+        // 특정레코드들을 모두출력하는 함수
+        var eachRecord = function(records, model){
+          console.log(model);
+          Ext.each(records, function(rec,idx){
+            console.log('No : ' + idx, rec.data);
+          });
+        };
+
+        //Organization정보를 읽어옴
+        /*
+        var user = ext5.model.ticket.Organization.load(1, {
+          success: function(org, operation){
+            console.log('조직정보 : ', org.data);
+
+            //프로젝트정보를 읽어옵니다.
+            org.projects().load({
+              callback: function (records){
+                eachRecord(records, 'Organization(1) > Project(n)');
+              }
+            });
+
+            //사용자정보를 모두 읽어옵니다.
+            org.users().load({
+              callback: function(records){
+                eachRecord(records, 'Organization(1) > User(n)');
+              }
+            });
+          }
+        });
+        */
+
+        //User정보를 읽어옴.
+        /*
+        ext5.model.ticket.User.load(2, {
+          success: function(record, operation){
+            console.log('User정보 ::', record.data);
+            //해당 User의 프로젝트 정보 읽어옴.(하나의 프로젝트 정보만 읽어 오므로 getProject를 사용)
+            record.getProject({
+              callback: function(project){
+                console.log('Proejct::',project.data);
+                // Query String Parameters
+                // filter:[{"property":"projectId","value":2,"exactMatch":true}] 형태로 호출됨
+                project.users().load({
+                  callback: function(records){
+                    eachRecord(records, 'Project(1)')
+                  }
+                });
+              }
+            });
+          }
+        });
+        */
+
+        //프로젝트에 해당 리더 정보 읽어 오기
+        ext5.model.ticket.Project.load(2, {
+          callback: function (record, operation){
+            console.log('프로젝트리더의 아이디::', record.get('leadId'));
+            record.getLead({
+              callback: function(leader) {
+                console.log('프로젝트를 통해 얻어온 리더의 정보는 ::', leader.data);
+              }
+            });
+          }
+        });
+
+
+        //이후 구현함
+      });
+    </script>
+  </body>
+</html>

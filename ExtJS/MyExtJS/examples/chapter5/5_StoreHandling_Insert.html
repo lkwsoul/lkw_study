@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.model.ticket.User',
+        'ext5.model.ticket.Organization',
+        'ext5.model.ticket.Project',
+        'ext5.model.ticket.Group'
+      ]);
+
+      Ext.onReady(function(){
+        // Store 객체생성함
+        var store = Ext.create('Ext.data.Store',{
+          model: 'ext5.model.ticket.User',
+          // 프록시를 설정함
+          proxy: {
+            type: 'ajax',
+            actionMethods: {
+              read: 'GET',
+              create: 'POST',
+              update: 'POST',
+              destory: 'POST'
+            },
+            api: {
+              read: '/resources/data/ticket-user.json?read',
+              create: '/resources/data/ticket-user.json?create',
+              update: '/resources/data/ticket-user.json?update',
+              destory: '/resources/data/ticket-user.json?destory'
+            },
+            writer: {
+              type: 'json',
+              allowSingle: false,     // 스토어에 저장 또는 수정,삭제가 한건만 이뤄지더라도 배열로 전달하는 설정.
+              writeAllFields: true    // 수정/삭제시 모든 필드값을 전송할것인지 여부
+            },
+            reader: {
+              type: 'json',
+              rootProperty: 'entitys'
+            },
+            autoLoad: false
+          }
+        });
+
+        //load 이벤트 리슨너를 등록함
+        store.on('load',function(records){
+          records.each(function(item){
+            console.log('item=',item.data);
+          });
+        });
+
+        //스토어 조작(CRUD)
+        //신규 User생성
+        var user = Ext.create('ext5.model.ticket.User',{
+          name: "홍길동",
+          projectId: 2,
+          organizationId: 1
+        });
+
+        store.add(user);    // 스토어를 이용하여 등록처리
+
+        //특정 위치에 입력하기
+        store.insert(0, {
+          name: "김길동",
+          projectId: 2,
+          organizationId: 1
+        });
+
+        var arrayModel = [];
+        for(var i=0; i<5; i++) {
+          arrayModel.push({
+            name: "홍길동"+i,
+            projectId: 2,
+            organizationId: 1
+          });
+        }
+        store.add(arrayModel);
+        var newRecords = store.getNewRecords();
+        Ext.each(newRecords, function(record,index){
+          console.log('New(', index, ')', record.get('name'));
+        });
+
+        store.sync();       // 서버에 적용
+
+      });
+    </script>
+  </body>
+</html>

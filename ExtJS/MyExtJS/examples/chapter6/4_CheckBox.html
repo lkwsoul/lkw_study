@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.view.chapter6.MyForm'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        fp.add({
+          xtype: 'checkboxgroup',
+          fieldLabel: '체크박스',
+          name: 'mobilephone',
+          columns: 3,
+          items: [
+            {
+              xtype: 'checkbox',
+              boxLabel: '아이폰4',
+              name: 'ip4'             //name으로 체크값을 세팅하는 예를 표시하기 위해 별도 name을 지정함
+            },
+            {
+              xtype: 'checkbox',      //defaultType이 checkbox이므로 생략가능함
+              boxLabel: '아이폰5',
+              name: 'mobilephone',
+              inputValue: 'ip5'
+            },
+            {
+              xtype: 'checkbox',
+              boxLabel: '갤럭시S',
+              name: 'mobilephone',
+              inputValue: 'gs'
+            },
+            {
+              xtype: 'checkbox',
+              boxLabel: '갤럭시노트',
+              name: 'mobilephone',
+              inputValue: 'gnote'
+            },
+            {
+              xtype: 'checkbox',
+              boxLabel: '베가',
+              name: 'mobilephone',
+              inputValue: 'vega'
+            },
+            {
+              xtype: 'checkbox',
+              boxLabel: 'G2',
+              name: 'mobilephone',
+              inputValue: 'g2'
+            }
+          ]
+        });
+
+        var chkboxgroup = fp.down('checkboxgroup[name=mobilephone]');
+
+        //name속성이 mobilephone인것 중에서 inputValue가 'gs' 인것 체크상태로 변경
+        /*
+        chkboxgroup.setValue({
+          mobilephone: ['gs']
+        });
+        */
+
+        //name속성이 mobilephone인것 중에서 name이 'ip4' 인것 체크상태로 변경
+        //boolean값을 조정함
+        /*
+        chkboxgroup.setValue({
+          ip4: true
+        });
+        */
+
+        //세번째로는 위 두가지 방법을 혼용하여 사용가능함
+        chkboxgroup.setValue({
+          mobilephone: ['gs', 'g2'],
+          ip4: true
+        });
+      });
+    </script>
+  </body>
+</html>

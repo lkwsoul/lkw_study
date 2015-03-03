@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.view.chapter6.MyForm'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        fp.add({
+          xtype: 'textfield',
+          msgTarget: 'under',                           // Ext.form.Labelable 클라스의 설정으로 필드 클래스의 메시지 영역 위치를 결정함
+          anchor: '100%',                               // 부모의 크기에 따라 자식의 크기가 결정된다. 
+          labelWidth: 120,                              // 라벨의 넓이 설정
+          fieldLabel: '텍스트 필드',                     // 라벨 텍스트
+          allowBlank: false,                            // 공백허용 여부, 폼전송시, isValid메서드가 false값을 반한함.
+          emptyText: '이 필드는 알파벳만 허용합니다.',    // 빈값일때 보여주는 값 세팅
+          maskRe: /[a-z]/i,                             // 입력가능한 값 세팅
+          name: 'mytext',
+          enableKeyEvents: true,
+          listeners: {
+            keydown: function(field, event){
+              console.log('keydown', arguments);
+            },
+            keypress: function(field, event){
+              console.log('keypress', arguments);
+            },
+            keyup: function(field, event){
+              console.log('keyup', arguments);
+            }
+          }
+        });
+
+      });
+    </script>
+  </body>
+</html>

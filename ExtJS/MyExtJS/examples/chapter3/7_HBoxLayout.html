@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>SAT</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+  <script type="text/javascript">
+    Ext.Loader.setConfig({
+      enable: true,
+      paths: {
+        'ext5':'/app'    // ext5라는 앱의 클라스들이 app폴더에 위치하고 있다는 의미
+      }
+    });
+
+    Ext.require([
+      'ext5.view.chapter3.HBoxLayout'  // 예제를 실행하기 위한 클라스를 동적 로딩함.
+      ]);
+
+    Ext.onReady(function(){            // 브라우저 로딩시 이벤트
+      Ext.create('ext5.view.chapter3.HBoxLayout',{    // 클라스를 인스턴스화 시킴, 변수에 할당
+        renderTo:document.body,                                            // 랜더링할 대상을 지정 가능함
+      });
+    });
+  </script>
+  </body>
+</html>

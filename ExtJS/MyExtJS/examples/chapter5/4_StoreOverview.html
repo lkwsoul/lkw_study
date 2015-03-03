@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'Ext.Component',
+        'ext5.model.ticket.User',
+        'ext5.model.ticket.Organization',
+        'ext5.model.ticket.Project',
+        'ext5.model.ticket.Group'
+      ]);
+
+      Ext.onReady(function(){
+        // Store 객체생성함
+        var store = Ext.create('Ext.data.Store',{
+          model: 'ext5.model.ticket.User',
+          // 프록시를 설정함
+          // 버전 4에서는 프록시를 반드시 정의해야 함(버전 5에서는 미지정시, 모델에 지정한 프록시가 동작함)
+          proxy: {
+            type: 'ajax',
+            url: '/resources/data/ticket-user.json',
+            reader: {
+              type: 'json',
+              rootProperty: 'entitys'
+            }
+          },
+          autoLoad: true      // 인스턴스 생성과 함께 데이터 로딩함
+        });
+
+        //load 이벤트 리슨너를 등록함
+        store.on('load',function(records){
+          records.each(function(item){
+            console.log('item=',item.data);
+          });
+        });
+
+        //스토어 조작(CRUD)
+
+      });
+    </script>
+  </body>
+</html>

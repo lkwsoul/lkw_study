@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.view.chapter6.MyForm'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        fp.add({
+          xtype: 'fieldcontainer',
+          fieldLabel: '리치 텍스트 에디터',
+          itemId: 'htmlfield1',
+          layout: 'anchor',
+          items: [
+            {
+              xtype: 'htmleditor',
+              name: 'bigcontent',
+              anchor: '100%'
+            },
+            {
+              xtype: 'displayfield',
+              anchor: '100%',
+              itemId: 'bigcontent',
+              style: {
+                borderColor: '#000000',
+                borderStyle: 'solid',
+                borderWidth: '1px'
+              }
+            }
+          ]
+        });
+
+        var htmlcontainer = fp.down('container[itemId=htmlfield1]');
+        htmlcontainer.insert(0,{
+          xtype: 'toolbar',
+          items: [
+            '-',                                  // '|'로 구분하기 위한 추가
+            {
+              xtype: 'button',
+              text: 'Save',
+              handler: function (button){
+                //클릭이벤트
+                var myView = button.up('fieldcontainer');
+                var bigcontent = myView.down('[itemId=bigcontent]');      // displayfiled  (수정모드에서 화면에 보여주기 위한 필드)
+                var myEditor = myView.down('[name=bigcontent]');          // htmleditor    (실제 에디터)
+                if(button.getText()=='Save'){
+                  button.setText("Edit");
+                  bigcontent.setValue(myEditor.getValue());
+                  myEditor.hide();
+                  bigcontent.show();
+                }else{
+                  button.setText("Save");
+                  bigcontent.setValue(bigcontent.getValue());
+                  myEditor.show();
+                  bigcontent.hide();
+                }
+              }
+            },
+            '-'                                   // '|'로 구분하기 위한 추가
+          ]
+        });
+
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.model.Board'
+      ]);
+
+      Ext.onReady(function(){
+        var board = Ext.create('ext5.model.Board',{
+          //id: 1,
+          title: '안녕하세요',
+          userName: '홍길동',
+          content: '게시물 내용을 입력합니다.',
+          role: 'User',
+          readCnt: 300,
+          deleteYn: false
+        })
+
+        //생성한 모델을 검증한다.
+        /*
+        var errors = board.getValidation();
+        console.log('오류발견여부', errors.dirty);
+        console.log('오류필드 content', errors.get('content'));
+        console.log('오류필드 role', errors.get('role'));
+        */
+
+        /* 
+        저장처리
+        idProperty로 지정된 'id'를 데이터 생성시,  존재하면 => 'update'
+                                               ,미존재하면 => 'create'
+        */
+        board.save({
+          success: function (record, operation){
+            console.log('저장처리하고 읽은 데이터 레코더는 :', record.data);
+          },
+          failute: function(record, operation){
+            console.log('저장실패');
+          },
+          callback: function(){
+            console.log('콜백처리');
+          }
+        });
+
+        /*
+        조회처리
+        */
+        var board_read = ext5.model.Board.load(33, {
+            success: function(record, operation){
+              console.log('읽어온 데이터 레코드는 : ',record.data);
+              /*삭제처리*/
+              record.erase({
+                success: function (record, operation){
+                  console.log('삭제 후 서버에서 전달한 결과는 : ', record.data);
+                }
+              });
+            }
+          }
+        );
+
+
+      });
+    </script>
+  </body>
+</html>

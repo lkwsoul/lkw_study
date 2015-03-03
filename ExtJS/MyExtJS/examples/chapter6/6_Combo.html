@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Model</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.view.chapter6.MyForm',
+        'ext5.model.smpl.Code'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter6.MyForm',{
+          renderTo: document.body
+        });
+
+        var store = Ext.create('Ext.data.Store',{
+          model: ext5.model.smpl.Code,
+          proxy:{
+            type: 'ajax',
+            url: '/resources/data/code.json',
+            reader: {
+              type: 'json',
+              root: 'entitys'
+            }
+          }
+        });
+
+        fp.add({
+          xtype: 'combo',
+          name: 'code',
+          store: store,
+          fieldLabel: '콤보박스',
+          displayField: 'cd_desc',      //화면에 표시되는 필드
+          valueField: 'cd_code',        //값으로 사용할 필드
+          queryMode: 'remote',          //서버와 통신여부(remote), 로컬테이터 사용(local), 추가값은 api문서확인 필요
+          forceSelection: true,         //사용자가 입력한 값을 전송못하게 함(즉, 선택한 값을 전송)
+          typeAhead: true,              //자동완성기능 활성화
+          typeAheadDelay: 100,          //자동완성기능 응답시간(queryMode 같이 사용할 경우 적절히 사용하여 데이터 노출하도록 함)
+          minChars:1,                   //자동완성을 위한 최소 입력 문자열 길이를 설정함
+          hideTrigger: false            //콤보박스 오른쪽에 있는 트리거 버튼을 숨길지 여부
+        });
+      });
+    </script>
+  </body>
+</html>
