@@ -2,6 +2,7 @@ Ext.define('ext5.view.chapter6.CheckOutMaster',{
   extend: 'Ext.form.Panel',
   alias: 'widget.chapter6-checkoutmaster',
   requires: [
+    'ext5.view.chapter6.DeliveryForm'
   ],
   title: '배송/결제',
   bodyPadding: 5,
@@ -17,6 +18,9 @@ Ext.define('ext5.view.chapter6.CheckOutMaster',{
       },
       //추가할 Items
       items:[
+        {
+          xtype: 'chapter6-deliveryform'
+        }
       ],
       buttons: [
         {
@@ -34,10 +38,12 @@ Ext.define('ext5.view.chapter6.CheckOutMaster',{
 
     me.callParent(arguments);
   },
-  onResetClick: function(){                           // OnResetClick 정의
+
+  onResetClick: function(){                                   // OnResetClick 정의
     this.getForm().reset();
   },
-  onCompleteClick: function(){                        // onCompleteClick 정의 
+
+  onCompleteClick: function(){                                // onCompleteClick 정의 
     var form = this.getForm();
     if(form.isValid()){
       console.log('Submmited Values',form.getValues(true));
