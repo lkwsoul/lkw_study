@@ -4,7 +4,8 @@ Ext.define('ext5.view.chapter6.CheckOutMaster',{
   requires: [
     'ext5.view.chapter6.DeliveryForm',
     'ext5.view.chapter6.DeliveryPersonInfo',
-    'ext5.view.chapter6.PaymentOfCardInfo'
+    'ext5.view.chapter6.PaymentOfCardInfo',
+    'ext5.view.chapter6.SurveyForm'
   ],
   title: '배송/결제',
   bodyPadding: 5,
@@ -28,6 +29,9 @@ Ext.define('ext5.view.chapter6.CheckOutMaster',{
         },
         {
           xtype: 'chapter6-paymentcard'
+        },
+        {
+          xtype: 'chapter6-surveyform'
         }
       ],
       buttons: [

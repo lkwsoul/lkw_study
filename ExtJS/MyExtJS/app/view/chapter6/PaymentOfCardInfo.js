@@ -85,10 +85,10 @@ Ext.define('ext5.view.chapter6.PaymentOfCardInfo',{
                 emptyText: '유효월',
                 hideLabel: true,
                 margins: '0 6 0 0',
-                store: new Ext.data.Store({
-                  fields: ['name','num'],
-                  data: (function (){
-                    var data = [],
+                store: new Ext.data.Store({                                   // 콤보박스에 스토어 지정
+                  fields: ['name','num'],                                     // 모델대신 fields설정을 사용함
+                  data: (function (){                                         // Store에 proxy를 설정하지 않고 data설정에 직접 데이터를 제공해 처리함
+                    var data = [],                                            // 반환할 데이터 배열 변수
                         months = ext5.view.chapter6.Months.monthNames;
                     Ext.Array.forEach(months, function(name,i){
                       data[i] = {name:name, num:i+1}
