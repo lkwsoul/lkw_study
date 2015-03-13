@@ -14,7 +14,8 @@ Ext.define('ext5.view.chapter6.DataSet',{
     ['20대','20'],
     ['30대','30'],
     ['40대','40'],
-    ['50대이상','50']
+    ['50대','50'],
+    ['60대이상','60']
   ],
   career: [
     ['1~3년','1~3'],
@@ -33,5 +34,17 @@ Ext.define('ext5.view.chapter6.DataSet',{
     ['파트타임','parttime'],
     ['프리랜서','freelancer'],
     ['기타','etc']
+  ],
+  interest: [
+    ['Java','java'],
+    ['C#','c#'],
+    ['C&C++','c&c++'],
+    ['ExtJS','ExtJS'],
+    ['JQuery','JQuery'],
+    ['Sencha-Touch','ST'],
+    ['JQuery-Mobile','JM'],
+    ['CSS','CSS'],
+    ['퍼블리싱','Publishing'],
+    ['웹디자인','WebDesign']
   ]
 });

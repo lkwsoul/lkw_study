@@ -2,7 +2,8 @@ Ext.define('ext5.view.chapter6.SurveyForm',{
   extend: 'Ext.form.FieldSet',
   xtype: 'chapter6-surveyform',
   requires:[
-    'ext5.view.chapter6.SurveyRadio'
+    'ext5.view.chapter6.SurveyRadio',
+    'ext5.view.chapter6.SurveyCheck'
   ],
   title: '설문조사',
   layout: 'anchor',
@@ -45,6 +46,12 @@ Ext.define('ext5.view.chapter6.SurveyForm',{
               code: 'jobtype'
             }
           ]
+        },
+        {
+          xtype: 'chapter6-surveycheck',
+          label: '관심분야(복수선택)',
+          code: 'interest',
+          columns : 5
         }
       ]
     });
