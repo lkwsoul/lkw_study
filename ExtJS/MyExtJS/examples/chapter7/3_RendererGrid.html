@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<!--
+  랜더러 사용 예
+  renderer: function(value, metaData, record, rowIndex, colIndex, store, view) {
+    return '[' + value + ']';
+  }
+  
+  - value : 해당 셀에 전달되는 데이터값
+  - metaData : 해당셀의 메타데이터를 포함한 컬렉션 객체
+  - record: 해당 행의 모델 레코드
+  - rowIndex : 현재 행의 인덱스 값
+  - colIndex : 현재 열의 인덱스 값
+  - store : 그리드가 사용중인 스토어
+  - view : 그리드 뷰
+
+  랜더러를 Ext.util.Format 클레스를 이용해 다음 코드처럼 간략하게 사용 가능함
+  - renderer : 'useMoney'
+  - renderer : 'uppercase'
+  - renderer : 'lowercase'
+  - renderer : Ext.util.Format.usMoney
+  - renderer : Ext.util.Format.uppercase
+  - renderer : Ext.util.Format.lowercase
+  - renderer : Ext.util.Format.numberRenderer('0.000')  : 숫자 3자리 마다 ',' 삽입
+  - renderer : Ext.util.Format.dateRenderer('Y-m-d') : 날짜 형식으로 '-' 삽입
+
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Grid</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+    <style tyep="text/css">
+      .my-cation-col-cell{
+        vertical-align: middle;
+      }
+      .x-action-col-icon {
+        height: 16px;
+        width: 16px;
+        margin-right: 8px;
+      }
+      .thumb-up{
+        background:url(/resources/images/up.png) 20px no-repeat !important;
+      }
+      .thumb-down{
+        background:url(/resources/images/down.png) 20px no-repeat !important;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.view.chapter7.RendererGrid'
+      ]);
+
+      Ext.onReady(function(){
+        
+        var fp = Ext.create('ext5.view.chapter7.RendererGrid',{
+          renderTo: document.body
+        });
+
+      });
+    </script>
+  </body>
+</html>
