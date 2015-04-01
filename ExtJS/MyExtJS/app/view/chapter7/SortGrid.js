@@ -1,6 +1,6 @@
-Ext.define('ext5.view.chapter7.SelectionModelGrid',{
+Ext.define('ext5.view.chapter7.SortGrid',{
   extend: 'Ext.grid.Panel',
-  alias: 'widget.chapter7-selectionmodelgrid',
+  alias: 'widget.chapter7-sortgrid',
   requires: [
     'Ext.grid.column.RowNumberer',
     'Ext.grid.column.Template',
@@ -14,58 +14,30 @@ Ext.define('ext5.view.chapter7.SelectionModelGrid',{
   initComponent: function() {
     var me = this;
     Ext.apply(this, {
-      // Cell탐색을 위해 selType을  cellmodel로 지정함
-      //selType: 'cellmodel',
-      tbar: [
-        {
-          xtype: 'button',
-          text: '선택된 로우 정보',
-          scope: me,
-          handler: this.selectRowInfo
-        },
-        '-',                                   // 구분자
-        {
-          xtype: 'button',
-          text: 'Cell탐색',
-          scope: me,
-          handler: this.selectCellTour
-        }
-      ],
+      multiColumnSort: true,                                // 다중정렬이 되도록 함
       store: {
         model: 'ext5.model.smpl.Order',
-        autoLoad: true
+        //remoteSort: true,
+        autoLoad: true,
+        sorters:[
+          'custoName',                                      // 주문자명(custoName)으로 정렬을 추가함, 필드명만 추가시 기본적으로 ASC로 정렬됨
+          {property:'orderAmount', direction:'DESC'}        // 주문액으로 내림차순 정렬함
+        ]
       },
-      columns: this.getColumnConfig()
-    });
+      columns: this.getColumnConfig(),
+      tbar:[
+        {
+          xtype: 'button',
+          itemId: 'amountBtn',
+          text: '주문액정령[DESC]',
+          scope: me,
+          handler: this.changeSort
+        }
+      ]
+    }
+    );
 
     me.callParent(arguments);
-
-    /*
-    select : 행이나 셀을 선택하면 발생함,  itemclick 이벤트와 달리 같은 행을 다시 선택하면 발생하지 않음(단,selType='cellmodel'로 설정하면 매번 발생함)
-    itemclick : 행을 셀을 클릭하면 발생함. 클릭된 행 다시 클릭해도 매번 발생함
-    itemdbclick : 행을 더블클릭하면 발생함
-    cellclick : 셀을 클릭하면 발생함
-    celldbclick : selType이 'cellmode' 일때 더블클릭 하면 발생함
-    */
-    me.on('select', function(grid, record, index) {
-      console.log('selected grid Data : ', index, record.data);
-    });
-
-    me.on('itemclick', function(grid, record, item, index) {
-      console.log('itemclick grid Data : ', index, record.data);
-    });
-
-    me.on('itemdbclick', function(grid, record, item, index) {
-      console.log('itemdbclick grid Data : ', index, record.data);
-    });
-
-    me.on('cellclick', function(grid, td, cellIndex, record, tr, rowIndex) {
-      console.log('cellclick grid Data : ', rowIndex, cellIndex, record.data);
-    });
-
-    me.on('celldbcick', function(grid, td, cellIndex, record, tr, rowIndex) {
-      console.log('celldbcick grid Data : ', rowIndex, cellIndex, record.data);
-    });
   },
 
   getColumnConfig: function() {
@@ -208,53 +180,17 @@ Ext.define('ext5.view.chapter7.SelectionModelGrid',{
     return Ext.util.Format.currency(value, nation, 0);
   },
 
-  // 선택된 로우 정보버튼 클릭처리 Function(행정보를 console log로 출력함)
-  selectRowInfo: function() {
-    var selectionModel = this.getSelectionModel(), record;
-    if(selectionModel.getSelection().length==0){            // 선택된 행이 없다면 첫번째 행을 선택하도록 함
-      selectionModel.select(0);
-    }
-
-    record = selectionModel.getSelection()[0];
-    console.log(record.data);
-  },
-  
-  //Cell탐색 버튼 클릭처리 Function(전체셀을 순차적으로 선택 되도록 함)
-  selectCellTour: function() {
-    // 사용할 변수 선언부
-    var me = this,
-        selectionModel = me.getSelectionModel(),    // 셀렉션 모델 구하기
-        columnCount = me.columns.length,            // 컬럼의 갯수 구하기
-        rowCount = me.getStore().getCount(),        // 행갯수 구하기
-        colinfo = []                                // 셀정보를 담기 위한 행렬변수
-        ;
-
-    for(var i=0;i<rowCount;i++){
-      for(var z=0;z<columnCount;z++){
-        colinfo.push({
-          row : i,
-          col : z
-        })
+  changeSort: function() {
+    var me = this;
+    me.getStore().getSorters().each(function(sort){
+      sort = sort.config;
+      if(sort.property=='orderAmount'){
+        var direction = (sort.direction=='ASC')?'DESC':'ASC';
+        me.down('button[itemId=amountBtn]').setText('주문액정렬['+direction+']');
+        me.getStore().sort([
+          {property:'orderAmount',direction:direction}
+          ]);
       }
-    }
-
-    var i = 0;
-
-    var task = {
-      run : function(){
-        if(colinfo.length<=(i+1)) {
-          Ext.TaskManager.stop(task);
-        }
-        selectionModel.setCurrentPosition({
-          row : colinfo[i].row,
-          column : colinfo[i].col
-        });
-        i++;
-      },
-      interval:200                                 // 1/1000 초 단위로 설정하므로 0.2로 interval설정하여 셀이 선택되도록 함
-    };
-
-    Ext.TaskManager.start(task);
+    });
   }
-
 });
