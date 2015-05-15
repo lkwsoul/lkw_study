@@ -17,7 +17,20 @@ Ext.define('ext5.view.chapter7.GroupingGrid',{
     Ext.apply(this, {
       features: [
         {
-          ftype: 'grouping'                 // 그룹화 피처를 추가함
+          //ftype: 'grouping'                 // 그룹화 피처를 추가함(단순그룹핑)
+          //ftype: 'groupingsummary'          // 그룹화 피처를 추가함(합게정보표시 그룹핑)
+          //ftype: 'summary'                  // 그룹화 피처를 추가함(합계정보만표시)
+                                              // (본 피처는 groupField:'areaNm"을 주석처리해야 함)
+          ftype: 'rowbody',                   // 각행마다 한줄씩 rowbody영역을 추가함
+          getAdditionalData:function(data, rowIndex, record, orig){
+            var headerCt = this.view.headerCt,
+                colspan = headerCt.getColumnCount();
+            return {
+              rowBody: '주문자 : '+ record.get('customName')+'<br>주문내역 : ' + record.get('orderDesc'),
+              rowBodyCls: (rowIndex%2)?"my-body-class" : this.rowBodyCls,
+              rowBodyColspan: colspan
+            }
+          }
         }
       ],
       tbar: [
@@ -88,6 +101,12 @@ Ext.define('ext5.view.chapter7.GroupingGrid',{
         text: '주문금액',
         //xtype: 'numbercolumn',
         //format: '0,000',
+        summaryType: 'sum',           // groupingsummary 종류
+                                      // count    : 표시된 행수를 의미한다.
+                                      // sum      : 열 데이터를 모두 합한 수를 반환한다.
+                                      // min      : 열 데이터 중 가장 작은 숫자를 반환한다.
+                                      // max      : 열 데이터 중 가장 큰 숫자를 반환한다.
+                                      // average  : 열 데이터의 평균을 반환한다
         style: 'text-align:center',
         align: 'right',
         width: 100,
@@ -101,7 +120,11 @@ Ext.define('ext5.view.chapter7.GroupingGrid',{
         style: 'text-align:center',
         align: 'right',
         width: 60,
-        dataIndex: 'orderCnt'
+        dataIndex: 'orderCnt',
+        summaryType: 'sum',
+        summaryRenderer: function(value){     // groupingsummary 표시랜더럴
+          return '총 '+value+'개';
+        }
       },
       {
         text: '주문내역',
@@ -124,6 +147,10 @@ Ext.define('ext5.view.chapter7.GroupingGrid',{
         renderer: function(value, metaData) {
           metaData.tdCls = 'thumb-' + value;
           return '';
+        },
+        summaryType: 'count',
+        summaryRenderer: function(value){     // groupingsummary 표시랜더럴
+          return '총 '+value+'건';
         }
       },
       {
@@ -135,6 +162,10 @@ Ext.define('ext5.view.chapter7.GroupingGrid',{
         dataIndex: 'accrueAmount',
         renderer: function(value) {
           return this.setMoney(value, 'Korea');
+        },
+        summaryType: 'average',
+        summaryRenderer: function(value){
+          return '평균 '+Ext.util.Format.number(value, ',0')+'원'; //천단위표시하기
         }
       },
       {
