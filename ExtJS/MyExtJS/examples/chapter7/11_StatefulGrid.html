@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<!--
+  그리드 상태 유지
+  실행이후, 콜솔에서 아래 수행후 페이지 로딩하면, 수정한 넑이와 높이를 유지하고 있음
+  grid = Ext.ComponentQuery.query('grid')[0];
+  grid.setWidth(200);
+  grid.setHeight(250);
+-->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>그리드상태유지</title>
+    <!--// Ext JS 테마스타일 파일 -->
+    <link rel="stylesheet" type="text/css" href="/ext/packages/ext-theme-gray/build/resources/ext-theme-gray-all-debug.css">
+    <!--// Ext JS 코어 라이브러리 -->
+    <script type="text/javascript" src="/ext/build/ext-all-debug.js"></script>
+    <style tyep="text/css">
+      .my-cation-col-cell{
+        vertical-align: middle;
+      }
+      .x-action-col-icon {
+        height: 16px;
+        width: 16px;
+        margin-right: 8px;
+      }
+      .thumb-up{
+        background:url(/resources/images/up.png) 20px no-repeat !important;
+      }
+      .thumb-down{
+        background:url(/resources/images/down.png) 20px no-repeat !important;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+      Ext.Loader.setConfig({
+        enabled: true,
+        paths:{
+          'ext5':'/app'
+        }
+      });
+
+      Ext.require([
+        'ext5.view.chapter7.StatefulGrid'
+      ]);
+
+//      Ext.onReady(function(){
+//
+//        var fp = Ext.create('ext5.view.chapter7.StatefulGrid',{
+//          renderTo: document.body
+//        });
+//
+//      });
+      // 상태유지를 위한 설정부분
+      Ext.onReady(function(){
+        Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));  // 상태유지를 위해 쿠키 프로바이더를 상태매니저에 등록함
+        Ext.create('ext5.view.chapter7.StatefulGrid',{
+          stateful: true,
+          stateId: 'stateGrid',
+          renderTo: document.body
+        })
+      });
+    </script>
+  </body>
+</html>
