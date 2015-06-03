@@ -12,6 +12,7 @@ Ext.define('ext5.view.chapter8.DataBindController', {
 
   },
 
+  // tbar 클릭이벤트 추가
   onClickButton: function () {
     Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);
   },
