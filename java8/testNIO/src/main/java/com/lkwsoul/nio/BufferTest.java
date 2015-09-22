@@ -3,10 +3,12 @@ package com.lkwsoul.nio;
 import java.io.IOException;
 import java.nio.*;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 /**
@@ -21,7 +23,11 @@ public class BufferTest {
 //    bean.test2();
 //    bean.test3();
 //    bean.test4();
-    bean.test5();
+//    bean.test5();
+//    bean.test6();
+//    bean.test7();
+//    bean.test8();
+    bean.test9();
   }
 
   /**
@@ -36,10 +42,10 @@ public class BufferTest {
    *                     = 입출력성능 높다
    */
   public void test1(){
-    ByteBuffer directBuffer = ByteBuffer.allocateDirect(800*1024*1024);
+    ByteBuffer directBuffer = ByteBuffer.allocateDirect(800 * 1024 * 1024);
     System.out.println("다이렉트 버퍼가 생성되었습니다.");
 
-    ByteBuffer nonDirectBuffer = ByteBuffer.allocate(800*1024*1024);
+    ByteBuffer nonDirectBuffer = ByteBuffer.allocate(800 * 1024 * 1024);
     System.out.println("넌다이렉트 버퍼가 생성되었습니다.");
   }
 
@@ -98,10 +104,28 @@ public class BufferTest {
     }
   }
 
+  public void test3(){
+    // None Direct Buffer 생성
+    ByteBuffer byteBuffer = ByteBuffer.allocate(100);
+    printState(byteBuffer);
+    // position: 0, 	limit: 100, 	capacity: 10
+
+    // wrap 메소드를 사용하여 생성
+    byte[] byteArray = new byte[100];
+    ByteBuffer byteBufferArray = ByteBuffer.wrap(byteArray);
+    printState(byteBufferArray);
+    // position: 0, 	limit: 100, 	capacity: 100
+
+    // wrap 메소드를 사용하여 일부 배열만 생성
+    ByteBuffer byteBufferArrayPart = ByteBuffer.wrap(byteArray, 0, 50);
+    printState(byteBufferArrayPart);
+    //position: 0, 	limit: 50, 	capacity: 100
+  }
+
   /**
    * DirectBuffer, 타입별 버퍼 생성
    */
-  public void test3(){
+  public void test4(){
     ByteBuffer byteBuffer = ByteBuffer.allocateDirect(100);
     System.out.println("byte 저장용량 : " + byteBuffer.capacity());
 
@@ -121,7 +145,7 @@ public class BufferTest {
    *
    * 다이렉트 버퍼일 경우 운영체제의 native I/O 를 사용하므로 운영체제의 기본 해석 순서로 JVM의 해석 순서를 맞추는 것이 성능에 도움이 됩니다.
    */
-  public void test4(){
+  public void test5(){
     System.out.println("운영체제 : " + System.getProperty("os.name"));
     System.out.println("네이티브의 바이트 해석순서 : " + ByteOrder.nativeOrder());
 
@@ -163,7 +187,7 @@ public class BufferTest {
    * - 크기 연관관계
    *   0 <= mark <= position <= limit <= capacity
    */
-  public void test5(){
+  public void test6(){
     System.out.println("[7바이트 크기로 버퍼 생성]");
 
     ByteBuffer buffer = ByteBuffer.allocateDirect(7);
@@ -209,10 +233,109 @@ public class BufferTest {
 
   }
 
+  public void printState(ByteBuffer buffer) {
+    int size = buffer.capacity();
+    for(int i=0;i<size;i++){
+      if(i==(size-1)) {
+        //System.out.print(buffer.get(i));
+        //Hex값으로 출력
+        System.out.format("%02X", buffer.get(i));
+      }else {
+        //System.out.print(buffer.get(i) + ", ");
+        //Hex값으로 출력
+        System.out.format("%02X", buffer.get(i));
+        System.out.print(",");
+      }
+    }
+//    System.out.print(buffer.get(1) + ", ");
+//    System.out.print(buffer.get(2) + ", ");
+//    System.out.print(buffer.get(3) + ", ");
+//    System.out.println(buffer.get(4));
+
+    System.out.print("\tposition: " + buffer.position() + ", ");
+    System.out.print("\tlimit: " + buffer.limit() + ", ");
+    System.out.println("\tcapacity: " + buffer.capacity());
+  }
+
   public void printState(Buffer buffer) {
     System.out.print("\tposition: " + buffer.position() + ", ");
     System.out.print("\tlimit: " + buffer.limit() + ", ");
     System.out.println("\tcapacity: " + buffer.capacity());
+  }
+
+  /**
+   * compact() 메소드 예제
+   */
+  public void test7(){
+    System.out.println("7바이트 크기로 버퍼 생성");
+    ByteBuffer buffer = ByteBuffer.allocateDirect(7);
+    buffer.put((byte)10);
+    buffer.put((byte)11);
+    buffer.put((byte)12);
+    buffer.put((byte)13);
+    buffer.put((byte) 14);
+    buffer.flip();
+    printState(buffer);
+
+    buffer.get(new byte[3]);
+    System.out.println("3바이트 읽음");
+
+    buffer.compact();
+    System.out.println("compact() 실행후");
+    printState(buffer);
+
+  }
+
+  /**
+   * ByteBufferToStringExample : ByteBuffer <-> String
+   */
+  public void test8(){
+    Charset charset = Charset.forName("UTF-8");
+
+    String data = "테스트입니다.";
+    ByteBuffer buffer = charset.encode(data);
+
+    data = charset.decode(buffer).toString();
+    System.out.println("문자열 복원 : " + data);
+  }
+
+  /**
+   * ByteBufferToIntBufferExample : ByteBuffer <-> IntBuffer
+   * boolean | 논리값               | 1bits
+   * byte    | 부호가 있는 정수       | 8bits
+   * char    | 유니코드 문자          | 16bits
+   * short   | 부호가 있는 정수        | 16bits
+   * int     | 부호가 있는 정수        | 32bits
+   * long    | 부호가 있는 정수        | 64bits
+   * float   | IEEE 754 실수        | 32bits
+   * double  | IEEE 754 실수        | 64bits
+   *
+   * 위의 결과와 같이 4byte = 1int로 표현할 수 있음.
+   */
+  public void test9(){
+    int[] writeData = { 9, 1234567, 30, 50, 70};
+    IntBuffer writeIntBuffer = IntBuffer.wrap(writeData);
+
+    // 1 int = 4byte
+    ByteBuffer writeByteBuffer = ByteBuffer.allocate(writeIntBuffer.capacity()*4);
+
+    for(int i=0; i<writeIntBuffer.capacity(); i++){
+      writeByteBuffer.putInt(writeIntBuffer.get(i));
+    }
+    System.out.println("ByteBuffer flip전");
+    printState(writeByteBuffer);
+    writeByteBuffer.flip();
+    System.out.println("ByteBuffer flip후");
+    printState(writeByteBuffer);
+
+    ByteBuffer readByteBuffer = writeByteBuffer;
+    IntBuffer  readIntBuffer  = readByteBuffer.asIntBuffer();
+
+    int[] readData = new int[readIntBuffer.capacity()];
+    readIntBuffer.get(readData);
+
+    System.out.println("배열복원 : "+ Arrays.toString(readData));
+
   }
 
 }
