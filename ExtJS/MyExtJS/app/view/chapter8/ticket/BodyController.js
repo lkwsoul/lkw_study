@@ -1,9 +1,9 @@
 /**
  * Created by lkwsoul on 15. 6. 16..
  */
-Ext.define('ex5.view.chapter8.ticket.BodyController', {
+Ext.define('ext5.view.chapter8.ticket.BodyController', {
     extend: 'Ext.app.ViewController',
-    alias: 'controller.body',
+    alias: 'controller.chapter8-ticketbody',
 
     /**
      * Called when the view is created
